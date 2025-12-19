@@ -23,8 +23,7 @@
 | 4️⃣   | Database Modeling Based on User Stories | Design models for Athlete, Payment, and role assignments (Coach, Superuser). |
 | 5️⃣   | Account App – Roles & Admin             | Configure Django Auth, Groups & Permissions, admin registrations, and forms. |
 | 6️⃣   | Payment App – Fee Records & Status      | Implement models, admin views, filters for paid/due, and coach visibility.   |
-| 7️⃣   | Reports App – Income & Debt Dashboards  | Create aggregations for total income, list of due athletes, and summaries.   |
-| 8️⃣   | Public App – Minimal Pages              | Build static pages (club intro, contact, rules) with basic template scaffolding. |
-| 9️⃣   | Phase 1 Summary & Transition            | Document outcomes, finalize deliverables, and prepare roadmap for Phase 2.   |
+| 7️⃣   | Public App – Minimal Pages              | Build static pages (club intro, contact, rules) with basic template scaffolding. |
+| 8️⃣   | Phase 1 Summary & Transition            | Document outcomes, finalize deliverables, and prepare roadmap for Phase 2.   |
 
 ---

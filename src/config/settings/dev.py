@@ -9,7 +9,7 @@ from .base import BASE_DIR
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.getenv("SQLITE_PATH", BASE_DIR.parent / "db.sqlite3"),
+        "NAME": os.getenv("SQLITE_PATH", BASE_DIR / "db.sqlite3"),
     }
 }
 # ----------------------------------------------------------------

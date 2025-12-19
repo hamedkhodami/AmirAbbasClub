@@ -41,3 +41,9 @@ def now_shamsi_date():
 def convert_str_to_shamsi_date(shamsi_date_str, frmt="%Y-%m-%d"):
     shamsi_date = jdatetime.datetime.strptime(shamsi_date_str, frmt).date()
     return shamsi_date
+
+
+def to_shamsi_date(gregorian_date, frmt="%Y/%m/%d"):
+    if gregorian_date:
+        return jdatetime.date.fromgregorian(date=gregorian_date).strftime(frmt)
+    return "-"
