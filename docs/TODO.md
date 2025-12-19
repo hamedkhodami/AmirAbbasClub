@@ -1,17 +1,17 @@
 # 🚀 Project TODO – AmirAbbasClub
 
 ## TODO List
-### accounts
+### account
 - implement role-based access (Coach, Superuser)
 - complete tests for user creation and permissions
 - configure Django Admin for coaches and superusers
 
-### payments
+### payment
 - implement Payment model (amount, date, status)
 - add admin filters for paid/due
 - write tests for payment creation and aggregation
 
-### reports
+### report
 - implement income aggregation (total fees)
 - list athletes with due payments
 - add simple date-range summaries
@@ -29,10 +29,10 @@
 | Step | Title                                      | Status |
 |-----:|--------------------------------------------|--------|
 | 1️⃣   | Project Architecture Setup (settings, structure) | ✅     |
-| 2️⃣   | Testing & Pre-commit Setup (pytest, coverage, hooks) | ✅     |
+| 2️⃣   | Pre-commit Setup (coverage, hooks) | ✅     |
 | 3️⃣   | Core App – Shared Models, Mixins, Utilities | ✅     |
-| 4️⃣   | Database Modeling Based on User Stories    | ✅     |
-| 5️⃣   | Account App – Roles & Admin                | 🎯     |
+| 4️⃣   | Database Modeling Based on User Stories    | 📌     |
+| 5️⃣   | Account App – Roles & Admin                | 📌     |
 | 6️⃣   | Payment App – Fee Records & Status         | 📌     |
 | 7️⃣   | Reports App – Income & Debt Dashboards     | 📌     |
 | 8️⃣   | Public App – Minimal Pages                 | 📌     |
