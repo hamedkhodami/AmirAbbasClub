@@ -1,6 +1,7 @@
 from apps.core import text
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.hashers import make_password
 
 from .enums import UserGenderEnum, UserRoleEnum
 from .models import User
@@ -80,6 +81,11 @@ class AthleteSignupForm(forms.ModelForm):
 
 
 class CoachSignupForm(forms.ModelForm):
+    password = forms.CharField(label="رمز عبور", widget=forms.PasswordInput)
+    confirm_password = forms.CharField(
+        label="تکرار رمز عبور", widget=forms.PasswordInput
+    )
+
     class Meta:
         model = User
         fields = [
@@ -106,11 +112,19 @@ class CoachSignupForm(forms.ModelForm):
             raise forms.ValidationError(text.national_id_already_exists)
         return nid
 
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm = cleaned_data.get("confirm_password")
+        if password and confirm and password != confirm:
+            raise forms.ValidationError("رمز عبور و تکرار آن یکسان نیستند.")
+        return cleaned_data
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.role = UserRoleEnum.COACH
-        user.set_unusable_password()
-        user.is_active = False
+        user.password = make_password(self.cleaned_data["password"])
+        user.is_active = True
         if commit:
             user.save()
         return user

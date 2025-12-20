@@ -1,4 +1,5 @@
 # Account
+logout = "شما با موفقیت خارج شدین."
 required_phone_number = "وارد کردن شماره تماس ضروری است"
 permission_denied = "شما اجازه دسترسی به این بخش را ندارید."
 user_not_found = "کاربری با این شماره یافت نشد."

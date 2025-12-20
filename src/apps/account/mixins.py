@@ -25,9 +25,9 @@ class RoleRequiredMixin(LoginRequiredMixin):
         raise PermissionDenied(text.permission_denied)
 
 
-class CoachOrSuperUserRequiredMixin(LoginRequiredMixin):
+class CoachOrSuperUserRequiredMixin(RoleRequiredMixin):
     allowed_roles = [UserRoleEnum.COACH, UserRoleEnum.SUPER_USER]
 
 
-class SuperUserRequiredMixin(LoginRequiredMixin):
+class SuperUserRequiredMixin(RoleRequiredMixin):
     allowed_roles = [UserRoleEnum.SUPER_USER]

@@ -11,7 +11,15 @@ class CustomUserAdmin(UserAdmin):
 
     model = models.User
 
-    list_display = ("phone_number", "is_active", "last_login", "role")
+    list_display = (
+        "phone_number",
+        "is_active",
+        "last_login",
+        "role",
+        "gender",
+        "first_name",
+        "last_name",
+    )
     list_filter = ("is_active", "role", "first_name", "last_name")
     fieldsets = (
         (

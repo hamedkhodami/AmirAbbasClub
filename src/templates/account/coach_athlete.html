@@ -35,6 +35,14 @@
         {{ form.image }}<br>
         {{ form.image.errors }}<br><br>
 
+        <label for="id_password">رمز عبور:</label><br>
+        {{ form.password }}<br>
+        {{ form.password.errors }}<br><br>
+
+        <label for="id_confirm_password">تکرار رمز عبور:</label><br>
+        {{ form.confirm_password }}<br>
+        {{ form.confirm_password.errors }}<br><br>
+
         <button type="submit">ثبت‌نام</button>
     </form>
 </body>

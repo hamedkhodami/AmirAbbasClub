@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>لیست ورزشکاران</title>
+</head>
+<body>
+    <h2>لیست ورزشکاران</h2>
+
+    <!-- فرم جستجو -->
+    <form method="get">
+        <input type="text" name="q" placeholder="جستجو بر اساس نام یا نام خانوادگی" value="{{ request.GET.q }}">
+        <button type="submit">جستجو</button>
+    </form>
+
+    <br>
+
+    <!-- لیست ورزشکاران -->
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>نام</th>
+                <th>شماره تماس</th>
+                <th>جنسیت</th>
+                <th>نقش</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for athlete in athletes %}
+                <tr>
+                    <td>{{ athlete.full_name }}</td>
+                    <td>{{ athlete.phone_number }}</td>
+                    <td>{{ athlete.get_gender_display }}</td>
+                    <td>{{ athlete.get_role_display }}</td>
+                    <td>
+                        <!-- تغییر نقش (فقط برای ابرکاربر) -->
+                        <form method="post" action="{% url 'apps.account:change_user_role' athlete.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('آیا از تغییر نقش مطمئن هستید؟')">تغییر نقش</button>
+                        </form> |
+
+                        <!-- مشاهده وضعیت پرداخت -->
+                        <a href="#">وضعیت پرداخت</a> |
+
+                        <!-- ثبت پرداخت جدید -->
+                        <a href="#">ثبت پرداخت</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">هیچ ورزشکاری یافت نشد.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- صفحه‌بندی -->
+    {% if is_paginated %}
+        <div>
+            {% if page_obj.has_previous %}
+                <a href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}">قبلی</a>
+            {% endif %}
+
+            <span>صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}">بعدی</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</body>
+</html>
