@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>ورود</title>
+</head>
+<body>
+    <h2>ورود به حساب</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>شماره تماس:</label><br>
+        <input type="text" name="phone_number"><br><br>
+
+        <label>رمز عبور:</label><br>
+        <input type="password" name="password"><br><br>
+
+        <button type="submit">ورود</button>
+    </form>
+
+    {% if form.errors %}
+        <div style="color:red;">
+            {{ form.errors }}
+        </div>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>ثبت‌نام ورزشکار</title>
+</head>
+<body>
+    <h2>فرم ثبت‌نام ورزشکار</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <label for="id_phone_number">شماره تماس:</label><br>
+        {{ form.phone_number }}<br>
+        {{ form.phone_number.errors }}<br><br>
+
+        <label for="id_first_name">نام:</label><br>
+        {{ form.first_name }}<br>
+        {{ form.first_name.errors }}<br><br>
+
+        <label for="id_last_name">نام خانوادگی:</label><br>
+        {{ form.last_name }}<br>
+        {{ form.last_name.errors }}<br><br>
+
+        <label for="id_national_id">کد ملی:</label><br>
+        {{ form.national_id }}<br>
+        {{ form.national_id.errors }}<br><br>
+
+        <label for="id_gender">جنسیت:</label><br>
+        {{ form.gender }}<br>
+        {{ form.gender.errors }}<br><br>
+
+        <label for="id_image">تصویر:</label><br>
+        {{ form.image }}<br>
+        {{ form.image.errors }}<br><br>
+
+        <button type="submit">ثبت‌نام</button>
+    </form>
+</body>
+</html>
