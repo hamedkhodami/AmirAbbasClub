@@ -11,6 +11,11 @@ urlpatterns = [
     # SuperUser
     path("all/athletes/", views.AthleteAllListView.as_view(), name="athlete_list_all"),
     path(
+        "user/<uuid:pk>/promote-to-coach/",
+        views.PromoteToCoachView.as_view(),
+        name="promote_to_coach",
+    ),
+    path(
         "change-role/<uuid:pk>/",
         views.ChangeUserRoleView.as_view(),
         name="change_user_role",

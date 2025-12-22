@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>home</title>
-</head>
-<body>
-hi hi hi
-</body>
-</html>
+{% load i18n %}
+
+
+{% block content %}
+
+  {% if role == "superuser" %}
+    {% include "public/dashboard_superuser.html" %}
+
+  {% elif role == "coach" %}
+    {% include "public/dashboard_coach.html" %}
+  {% endif %}
+{% endblock %}

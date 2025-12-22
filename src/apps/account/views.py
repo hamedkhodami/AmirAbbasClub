@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import FormView
 from django.core.exceptions import PermissionDenied
@@ -11,7 +12,7 @@ from django.views.generic import ListView, RedirectView
 
 from . import mixins
 from .enums import UserRoleEnum
-from .forms import AthleteSignupForm, CoachSignupForm, LoginForm
+from .forms import AthleteSignupForm, CoachSignupForm, LoginForm, PromoteToCoachForm
 from .models import User
 
 
@@ -56,6 +57,28 @@ class AthleteAllListView(mixins.SuperUserRequiredMixin, ListView):
         return base_qs.order_by("first_name")
 
 
+class PromoteToCoachView(mixins.SuperUserRequiredMixin, FormView):
+    template_name = "account/promote_to_coach.html"
+    form_class = PromoteToCoachForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.user_obj = get_object_or_404(User, pk=kwargs["pk"])
+        if self.user_obj.role != UserRoleEnum.ATHLETE:
+            raise PermissionDenied("فقط ورزشکار را می‌توان به مربی ارتقا داد.")
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        password = form.cleaned_data["password"]
+        self.user_obj.role = UserRoleEnum.COACH
+        self.user_obj.password = make_password(password)
+        self.user_obj.is_active = True
+        self.user_obj.save()
+        messages.success(
+            self.request, f"نقش {self.user_obj.full_name()} به مربی تغییر یافت."
+        )
+        return redirect("apps.account:athlete_list_all")
+
+
 class ChangeUserRoleView(mixins.SuperUserRequiredMixin, View):
     def post(self, request, pk):
         user = get_object_or_404(User, pk=pk)
@@ -64,18 +87,19 @@ class ChangeUserRoleView(mixins.SuperUserRequiredMixin, View):
             raise PermissionDenied("نمی‌توان نقش ابرکاربر را تغییر داد.")
 
         if user.role == UserRoleEnum.ATHLETE:
-            user.role = UserRoleEnum.COACH
-            messages.success(request, f"نقش {user.full_name()} به مربی تغییر یافت.")
+            return redirect("apps.account:promote_to_coach", pk=user.pk)
+
         else:
             user.role = UserRoleEnum.ATHLETE
+            user.set_unusable_password()
+            user.is_active = False
+            user.save()
             messages.success(request, f"نقش {user.full_name()} به ورزشکار تغییر یافت.")
-
-        user.save()
-        return redirect("apps.account:athlete_list_all")
+            return redirect("apps.account:athlete_list_all")
 
 
 class CoachSignupView(mixins.SuperUserRequiredMixin, FormView):
-    template_name = "account/coach_athlete.html"
+    template_name = "account/signup_coach.html"
     form_class = CoachSignupForm
     success_url = reverse_lazy("apps.account:login")
 

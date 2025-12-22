@@ -1,4 +1,4 @@
-# 🚀 Project TODO – AmirAbbasClub
+## 🚀 Project TODO – AmirAbbasClub
 
 ## TODO List
 ### account
@@ -23,13 +23,26 @@
 | Step | Title                                      | Status |
 |-----:|--------------------------------------------|--------|
 | 1️⃣   | Project Architecture Setup (settings, structure) | ✅     |
-| 2️⃣   | Pre-commit Setup (coverage, hooks) | ✅     |
-| 3️⃣   | Core App – Shared Models, Mixins, Utilities | ✅     |
-| 4️⃣   | Database Modeling Based on User Stories    | ✅     |
-| 5️⃣   | Account App – Roles & Admin                | ✅     |
-| 6️⃣   | Payment App – Fee Records & Status         | ✅     |
-| 7️⃣   | Public App – Minimal Pages                 | 🎯     |
-| 8️⃣   | Phase 1 Summary & Transition               | 📌     |
+| 2️⃣   | Pre-commit Setup (coverage, hooks)               | ✅     |
+| 3️⃣   | Core App – Shared Models, Mixins, Utilities      | ✅     |
+| 4️⃣   | Database Modeling Based on User Stories          | ✅     |
+| 5️⃣   | Account App – Roles & Admin                      | ✅     |
+| 6️⃣   | Payment App – Fee Records & Status               | ✅     |
+| 7️⃣   | Public App – Minimal Pages                       | ✅     |
+| 8️⃣   | Phase 1 Summary & Transition                     | ✅     |
+
+---
+
+## 🎨 Phase 2 – UI/UX & Frontend Integration
+
+| Step | Title                                               | Status |
+|-----:|-----------------------------------------------------|--------|
+| 1️⃣   | Tailwind CSS Setup & Configuration                 | 📌     | 
+| 2️⃣   | UI/UX Design Foundation                             | 📌     |
+| 3️⃣   | Frontend Integration with Django Templates          | 📌     | 
+| 4️⃣   | Dynamic Behavior (JS Enhancements if needed)        | 📌     | 
+| 5️⃣   | Full UI Testing & Visual QA                         | 📌     | 
+| 6️⃣   | Phase 2 Summary & UI Freeze                         | 📌     | 
 
 ---
 

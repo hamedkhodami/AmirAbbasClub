@@ -1,0 +1,20 @@
+<h2>داشبورد ابرکاربر</h2>
+<hr>
+
+<ul style="list-style: none; padding: 0;">
+    <li style="margin-bottom: 10px;">
+        <a href="{% url 'apps.account:athlete_list_all' %}">👥 لیست کاربران</a>
+    </li>
+    <li style="margin-bottom: 10px;">
+        <a href="{% url 'apps.account:signup_athlete' %}">➕ ثبت‌نام کاربر جدید</a>
+    </li>
+    <li style="margin-bottom: 10px;">
+        <a href="{% url 'apps.account:signup_coach' %}">🏋️ ثبت‌نام مربی</a>
+    </li>
+    <li style="margin-bottom: 10px;">
+        <a href="{% url 'apps.payment:income_summary' %}">💰 لیست درآمدهای ما</a>
+    </li>
+    <li style="margin-bottom: 10px;">
+        <a href="{% url 'apps.account:logout' %}">🚪 خروج</a>
+    </li>
+</ul>
