@@ -27,8 +27,8 @@
 | 3️⃣   | Core App – Shared Models, Mixins, Utilities | ✅     |
 | 4️⃣   | Database Modeling Based on User Stories    | ✅     |
 | 5️⃣   | Account App – Roles & Admin                | ✅     |
-| 6️⃣   | Payment App – Fee Records & Status         | 🎯     |
-| 7️⃣   | Public App – Minimal Pages                 | 📌     |
+| 6️⃣   | Payment App – Fee Records & Status         | ✅     |
+| 7️⃣   | Public App – Minimal Pages                 | 🎯     |
 | 8️⃣   | Phase 1 Summary & Transition               | 📌     |
 
 ---

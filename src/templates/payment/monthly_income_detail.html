@@ -1,0 +1,72 @@
+{% load payment_extras %}
+{% load humanize %}
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>پرداخت‌های {{ month_label }} {{ selected_year }}</title>
+</head>
+<body>
+    <h2>پرداخت‌های موفق {{ month_label }} سال {{ selected_year }}</h2>
+
+    <!-- فیلتر سال -->
+    <form method="get">
+        <label for="year">انتخاب سال:</label>
+        <select name="year" id="year" onchange="this.form.submit()">
+            {% for year in year_choices %}
+                <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <hr>
+
+    <!-- مجموع درآمد -->
+    <p style="font-weight: bold; font-size: 16px;">
+        مجموع درآمد این ماه: {{ total_income|intcomma }} تومان
+    </p>
+
+    {% if payments %}
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>ورزشکار</th>
+                    <th>مبلغ</th>
+                    <th>تاریخ ثبت</th>
+                    <th>ثبت‌کننده</th>
+                    <th>توضیحات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in payments %}
+                <tr>
+                    <td>{{ payment.user.full_name }}</td>
+                    <td>{{ payment.formatted_amount }}</td>
+                    <td>{{ payment.created_at_shamsi }}</td>
+                    <td>{{ payment.created_by.full_name }}</td>
+                    <td>{{ payment.description|default:"ـ" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- پجینیشن -->
+        <div style="margin-top: 20px;">
+            {% if payments.has_other_pages %}
+                <div>
+                    {% if payments.has_previous %}
+                        <a href="?year={{ selected_year }}&page={{ payments.previous_page_number }}">صفحه قبل</a>
+                    {% endif %}
+
+                    <span>صفحه {{ payments.number }} از {{ payments.paginator.num_pages }}</span>
+
+                    {% if payments.has_next %}
+                        <a href="?year={{ selected_year }}&page={{ payments.next_page_number }}">صفحه بعد</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <p style="color: red;">هیچ پرداخت موفقی برای این ماه در سال {{ selected_year }} ثبت نشده است.</p>
+    {% endif %}
+</body>
+</html>

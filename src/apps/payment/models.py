@@ -15,7 +15,6 @@ class PaymentModel(BaseModel):
         limit_choices_to={"role": "athlete"},
     )
     amount = models.PositiveIntegerField("مبلغ (تومان)")
-    paid_at = models.DateField("تاریخ پرداخت")
     month_label = models.CharField(
         "ماه مربوطه",
         max_length=12,
@@ -28,17 +27,21 @@ class PaymentModel(BaseModel):
         default=PaymentStatus.PAID,
     )
     description = models.TextField("توضیحات", blank=True, null=True)
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="payments_created",
+        verbose_name="ثبت‌کننده",
+    )
 
     class Meta:
         verbose_name = "پرداخت"
         verbose_name_plural = "پرداخت‌ها"
-        ordering = ["-paid_at"]
 
     def __str__(self):
         return f"{self.user.full_name()} - {self.amount} تومان"
-
-    def paid_at_shamsi(self):
-        return to_shamsi_date(self.paid_at)
 
     def month_label_display(self):
         return self.get_month_label_display()
@@ -51,3 +54,6 @@ class PaymentModel(BaseModel):
 
     def formatted_amount(self):
         return f"{self.amount:,} تومان"
+
+    def created_at_shamsi(self):
+        return to_shamsi_date(self.created_at)

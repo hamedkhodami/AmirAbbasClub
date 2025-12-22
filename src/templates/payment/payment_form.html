@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>ثبت پرداخت جدید</title>
+</head>
+<body>
+    <h2>ثبت پرداخت برای {{ athlete.full_name }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <label for="id_amount">مبلغ (تومان):</label><br>
+        {{ form.amount }}<br>
+        {{ form.amount.errors }}<br><br>
+
+        <label for="id_month_label">ماه مربوطه:</label><br>
+        <select name="month_label" id="id_month_label">
+            {% for value, label in form.fields.month_label.choices %}
+                {% if value %}
+                    <option value="{{ value }}" {% if value in paid_months %}disabled{% endif %}>
+                        {{ label }}{% if value in paid_months %} (پرداخت شده){% endif %}
+                    </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        {{ form.month_label.errors }}<br><br>
+
+        <label for="id_status">وضعیت:</label><br>
+        {{ form.status }}<br>
+        {{ form.status.errors }}<br><br>
+
+        <label for="id_description">توضیحات:</label><br>
+        {{ form.description }}<br>
+        {{ form.description.errors }}<br><br>
+
+        <button type="submit">ثبت پرداخت</button>
+    </form>
+</body>
+</html>

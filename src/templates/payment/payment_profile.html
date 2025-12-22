@@ -1,0 +1,54 @@
+{% load payment_extras %}
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>وضعیت پرداخت {{ athlete.full_name }}</title>
+</head>
+<body>
+    <h2>وضعیت پرداخت شهریه برای {{ athlete.full_name }}</h2>
+    <hr>
+    <form method="get">
+        <label for="year">انتخاب سال:</label>
+        <select name="year" id="year" onchange="this.form.submit()">
+            {% for year in year_choices %}
+                <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select>
+    </form>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ماه</th>
+                <th>وضعیت</th>
+                <th>مبلغ</th>
+                <th>تاریخ ثبت</th>
+                <th>ثبت‌کننده</th>
+                <th>توضیحات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for value, label in month_choices %}
+                {% with payment=payments_by_month|get_item:value %}
+                <tr>
+                    <td>{{ label }}</td>
+
+                    {% if payment %}
+                        <td style="color: green;">پرداخت شده</td>
+                        <td>{{ payment.formatted_amount }}</td>
+                        <td>{{ payment.created_at_shamsi }}</td>
+                        <td>{{ payment.created_by.full_name }}</td>
+                        <td>{{ payment.description|default:"ـ" }}</td>
+                    {% else %}
+                        <td style="color: red;">پرداخت نشده</td>
+                        <td>ـ</td>
+                        <td>ـ</td>
+                        <td>ـ</td>
+                        <td>ـ</td>
+                    {% endif %}
+                </tr>
+                {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

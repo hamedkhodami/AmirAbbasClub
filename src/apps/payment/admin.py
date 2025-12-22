@@ -10,12 +10,11 @@ class PaymentAdmin(admin.ModelAdmin):
         "user_phone",
         "formatted_amount",
         "month_label",
-        "paid_at_shamsi",
         "status_display",
+        "created_by",
     )
-    list_filter = ("month_label", "status", "paid_at")
+    list_filter = ("month_label", "status")
     search_fields = ("user__first_name", "user__last_name", "user__phone_number")
-    ordering = ("-paid_at",)
 
     @admin.display(description="نام ورزشکار")
     def user_full_name(self, obj):
@@ -28,10 +27,6 @@ class PaymentAdmin(admin.ModelAdmin):
     @admin.display(description="مبلغ")
     def formatted_amount(self, obj):
         return f"{obj.amount:,} تومان"
-
-    @admin.display(description="تاریخ پرداخت (شمسی)")
-    def paid_at_shamsi(self, obj):
-        return obj.paid_at_shamsi()
 
     @admin.display(description="وضعیت")
     def status_display(self, obj):

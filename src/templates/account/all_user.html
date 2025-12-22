@@ -41,10 +41,10 @@
                         </form> |
 
                         <!-- مشاهده وضعیت پرداخت -->
-                        <a href="#">وضعیت پرداخت</a> |
+                        <a href="{% url 'apps.payment:payment_profile' athlete.id %}">وضعیت پرداخت</a> |
 
                         <!-- ثبت پرداخت جدید -->
-                        <a href="#">ثبت پرداخت</a>
+                        <a href="{% url 'apps.payment:payment_create' athlete.id %}">ثبت پرداخت</a>
                     </td>
                 </tr>
             {% empty %}

@@ -1,0 +1,42 @@
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>خلاصه درآمد سال {{ selected_year }}</title>
+</head>
+<body>
+    <h2>خلاصه درآمد ماهانه - سال {{ selected_year }}</h2>
+
+    <!-- فیلتر سال -->
+    <form method="get">
+        <label for="year">انتخاب سال:</label>
+        <select name="year" id="year" onchange="this.form.submit()">
+            {% for year in year_choices %}
+                <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <hr>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ماه</th>
+                <th>مشاهده پرداخت‌ها</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for value, label in month_choices %}
+            <tr>
+                <td>{{ label }}</td>
+                <td>
+                    <a href="{% url 'apps.payment:monthly_income_detail' value %}?year={{ selected_year }}">
+                        مشاهده پرداخت‌های {{ label }}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
