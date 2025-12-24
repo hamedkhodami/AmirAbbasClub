@@ -1,41 +1,87 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <title>ثبت پرداخت جدید</title>
-</head>
-<body>
-    <h2>ثبت پرداخت برای {{ athlete.full_name }}</h2>
+{% extends 'base/base.html' %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
+{% block title %}ثبت پرداخت جدید{% endblock %}
 
-        <label for="id_amount">مبلغ (تومان):</label><br>
-        {{ form.amount }}<br>
-        {{ form.amount.errors }}<br><br>
+{% block body %}
+<div class="flex items-center justify-center min-h-screen px-4 bg-gray-900">
+  <div class="w-full max-w-xl bg-gray-800 text-white rounded-xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-center text-red-500 mb-6">
+      ثبت پرداخت برای {{ athlete.full_name }}
+    </h2>
 
-        <label for="id_month_label">ماه مربوطه:</label><br>
-        <select name="month_label" id="id_month_label">
-            {% for value, label in form.fields.month_label.choices %}
-                {% if value %}
-                    <option value="{{ value }}" {% if value in paid_months %}disabled{% endif %}>
-                        {{ label }}{% if value in paid_months %} (پرداخت شده){% endif %}
-                    </option>
-                {% endif %}
-            {% endfor %}
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="text-red-400 text-sm bg-red-900 bg-opacity-20 p-3 rounded">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <!-- مبلغ -->
+      <div>
+        <label for="id_amount" class="block mb-1 text-sm">مبلغ (تومان):</label>
+        <input type="text" name="amount" id="id_amount"
+               value="{{ form.amount.value|default_if_none:'' }}"
+               class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" />
+        {% if form.amount.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.amount.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <!-- ماه مربوطه -->
+      <div>
+        <label for="id_month_label" class="block mb-1 text-sm">ماه مربوطه:</label>
+        <select name="month_label" id="id_month_label"
+                class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+          {% for value, label in form.fields.month_label.choices %}
+            {% if value %}
+              <option value="{{ value }}" {% if value in paid_months %}disabled class="text-gray-400"{% endif %}
+                {% if form.month_label.value == value %}selected{% endif %}>
+                {{ label }}{% if value in paid_months %} (پرداخت شده){% endif %}
+              </option>
+            {% endif %}
+          {% endfor %}
         </select>
-        {{ form.month_label.errors }}<br><br>
+        {% if form.month_label.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.month_label.errors.0 }}</p>
+        {% endif %}
+      </div>
 
-        <label for="id_status">وضعیت:</label><br>
-        {{ form.status }}<br>
-        {{ form.status.errors }}<br><br>
+      <!-- وضعیت -->
+        <div>
+          <label for="id_status" class="block mb-1 text-sm">وضعیت:</label>
+          <select name="status" id="id_status"
+                  class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+            {% for value, label in form.fields.status.choices %}
+              {% if value != "" %}
+                <option value="{{ value }}" {% if form.status.value == value %}selected{% endif %}>
+                  {{ label }}
+                </option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          {% if form.status.errors %}
+            <p class="text-red-400 text-sm mt-1">{{ form.status.errors.0 }}</p>
+          {% endif %}
+        </div>
 
-        <label for="id_description">توضیحات:</label><br>
-        {{ form.description }}<br>
-        {{ form.description.errors }}<br><br>
+      <!-- توضیحات -->
+      <div>
+        <label for="id_description" class="block mb-1 text-sm">توضیحات:</label>
+        <textarea name="description" id="id_description" rows="3"
+                  class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">{{ form.description.value|default_if_none:'' }}</textarea>
+        {% if form.description.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.description.errors.0 }}</p>
+        {% endif %}
+      </div>
 
-        <button type="submit">ثبت پرداخت</button>
+      <!-- دکمه ثبت -->
+      <button type="submit"
+              class="w-full bg-red-600 hover:bg-red-700 transition-colors py-2 rounded-lg font-semibold">
+        💳 ثبت پرداخت
+      </button>
     </form>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

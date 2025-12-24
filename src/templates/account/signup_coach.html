@@ -1,49 +1,118 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <title>ثبت‌نام مربی</title>
-</head>
-<body>
-    <h2>فرم ثبت‌نام مربی</h2>
+{% extends 'base/base.html' %}
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
+{% block title %}ثبت‌نام مربی{% endblock %}
 
-        <label for="id_phone_number">شماره تماس:</label><br>
-        {{ form.phone_number }}<br>
-        {{ form.phone_number.errors }}<br><br>
+{% block body %}
+<div class="flex items-center justify-center min-h-screen px-4 bg-gray-900 text-white">
+  <div class="w-full max-w-xl bg-gray-800 rounded-xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-center text-red-500 mb-6">فرم ثبت‌نام مربی</h2>
 
-        <label for="id_first_name">نام:</label><br>
-        {{ form.first_name }}<br>
-        {{ form.first_name.errors }}<br><br>
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+      {% csrf_token %}
 
-        <label for="id_last_name">نام خانوادگی:</label><br>
-        {{ form.last_name }}<br>
-        {{ form.last_name.errors }}<br><br>
+      {% if form.non_field_errors %}
+        <div class="text-red-400 text-sm bg-red-900 bg-opacity-20 p-3 rounded">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
 
-        <label for="id_national_id">کد ملی:</label><br>
-        {{ form.national_id }}<br>
-        {{ form.national_id.errors }}<br><br>
+      <!-- شماره تماس -->
+      <div>
+        <label for="id_phone_number" class="block mb-1 text-sm">شماره تماس:</label>
+        <input type="text" name="phone_number" id="id_phone_number"
+               value="{{ form.phone_number.value|default_if_none:'' }}"
+               class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" />
+        {% if form.phone_number.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.phone_number.errors.0 }}</p>
+        {% endif %}
+      </div>
 
-        <label for="id_gender">جنسیت:</label><br>
-        {{ form.gender }}<br>
-        {{ form.gender.errors }}<br><br>
+      <!-- نام -->
+      <div>
+        <label for="id_first_name" class="block mb-1 text-sm">نام:</label>
+        <input type="text" name="first_name" id="id_first_name"
+               value="{{ form.first_name.value|default_if_none:'' }}"
+               class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" />
+        {% if form.first_name.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.first_name.errors.0 }}</p>
+        {% endif %}
+      </div>
 
-        <label for="id_image">تصویر:</label><br>
-        {{ form.image }}<br>
-        {{ form.image.errors }}<br><br>
+      <!-- نام خانوادگی -->
+      <div>
+        <label for="id_last_name" class="block mb-1 text-sm">نام خانوادگی:</label>
+        <input type="text" name="last_name" id="id_last_name"
+               value="{{ form.last_name.value|default_if_none:'' }}"
+               class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" />
+        {% if form.last_name.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.last_name.errors.0 }}</p>
+        {% endif %}
+      </div>
 
-        <label for="id_password">رمز عبور:</label><br>
-        {{ form.password }}<br>
-        {{ form.password.errors }}<br><br>
+      <!-- کد ملی -->
+      <div>
+        <label for="id_national_id" class="block mb-1 text-sm">کد ملی:</label>
+        <input type="text" name="national_id" id="id_national_id"
+               value="{{ form.national_id.value|default_if_none:'' }}"
+               class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" />
+        {% if form.national_id.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.national_id.errors.0 }}</p>
+        {% endif %}
+      </div>
 
-        <label for="id_confirm_password">تکرار رمز عبور:</label><br>
-        {{ form.confirm_password }}<br>
-        {{ form.confirm_password.errors }}<br><br>
+      <!-- جنسیت -->
+      <div>
+        <label for="id_gender" class="block mb-1 text-sm">جنسیت:</label>
+        <select name="gender" id="id_gender"
+                class="w-full px-4 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+          {% for value, label in form.fields.gender.choices %}
+            {% if value != "" %}
+              <option value="{{ value }}" {% if form.gender.value == value %}selected{% endif %}>
+                {{ label }}
+              </option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        {% if form.gender.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.gender.errors.0 }}</p>
+        {% endif %}
+      </div>
 
-        <button type="submit">ثبت‌نام</button>
+      <!-- تصویر -->
+      <div>
+        <label for="id_image" class="block mb-1 text-sm">تصویر:</label>
+        {{ form.image }}
+        {% if form.image.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.image.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <!-- رمز عبور -->
+      <div>
+        <label for="id_password" class="block mb-1 text-sm">رمز عبور:</label>
+        <input type="password" name="password" id="id_password"
+               class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" />
+        {% if form.password.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.password.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <!-- تکرار رمز عبور -->
+      <div>
+        <label for="id_confirm_password" class="block mb-1 text-sm">تکرار رمز عبور:</label>
+        <input type="password" name="confirm_password" id="id_confirm_password"
+               class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" />
+        {% if form.confirm_password.errors %}
+          <p class="text-red-400 text-sm mt-1">{{ form.confirm_password.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <!-- دکمه ثبت -->
+      <button type="submit"
+              class="w-full bg-red-600 hover:bg-red-700 transition-colors py-2 rounded-lg font-semibold">
+        📝 ثبت‌نام
+      </button>
     </form>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

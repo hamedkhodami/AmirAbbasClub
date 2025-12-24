@@ -1,0 +1,30 @@
+{% load static %}
+<html lang="fa" dir="rtl">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>{% block title%}{% endblock %}</title>
+
+  <link rel="stylesheet" href="{% static 'public/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'public/css/main.css' %}">
+
+  <link rel="icon" href="{% static 'public/images/logo.png' %}" type="image/x-icon">
+    {% block extra_style %}
+    {% endblock %}
+</head>
+
+<body class="bg-gray-900 flex flex-col min-h-screen">
+
+  <main class="flex-grow">
+    {% block body %}{% endblock %}
+  </main>
+
+  <script src="{% static 'public/js/main.js' %}"></script>
+
+  {% block extra_script %}
+  {% endblock %}
+</body>
+
+</html>

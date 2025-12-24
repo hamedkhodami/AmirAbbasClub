@@ -1,54 +1,69 @@
+{% extends 'base/base.html' %}
 {% load payment_extras %}
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <title>وضعیت پرداخت {{ athlete.full_name }}</title>
-</head>
-<body>
-    <h2>وضعیت پرداخت شهریه برای {{ athlete.full_name }}</h2>
-    <hr>
-    <form method="get">
-        <label for="year">انتخاب سال:</label>
-        <select name="year" id="year" onchange="this.form.submit()">
-            {% for year in year_choices %}
-                <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
-            {% endfor %}
-        </select>
-    </form>
-    <table border="1" cellpadding="8" cellspacing="0">
-        <thead>
-            <tr>
-                <th>ماه</th>
-                <th>وضعیت</th>
-                <th>مبلغ</th>
-                <th>تاریخ ثبت</th>
-                <th>ثبت‌کننده</th>
-                <th>توضیحات</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for value, label in month_choices %}
-                {% with payment=payments_by_month|get_item:value %}
-                <tr>
-                    <td>{{ label }}</td>
 
-                    {% if payment %}
-                        <td style="color: green;">پرداخت شده</td>
-                        <td>{{ payment.formatted_amount }}</td>
-                        <td>{{ payment.created_at_shamsi }}</td>
-                        <td>{{ payment.created_by.full_name }}</td>
-                        <td>{{ payment.description|default:"ـ" }}</td>
-                    {% else %}
-                        <td style="color: red;">پرداخت نشده</td>
-                        <td>ـ</td>
-                        <td>ـ</td>
-                        <td>ـ</td>
-                        <td>ـ</td>
-                    {% endif %}
-                </tr>
-                {% endwith %}
-            {% endfor %}
+{% block title %}وضعیت پرداخت {{ athlete.full_name }}{% endblock %}
+
+{% block body %}
+<div class="flex flex-col items-center justify-center min-h-screen px-4 bg-gray-900 text-white">
+  <div class="w-full max-w-6xl">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-red-500">وضعیت پرداخت شهریه</h2>
+      <p class="text-gray-300 mt-2 text-lg">{{ athlete.full_name }}</p>
+    </div>
+
+    <!-- فرم انتخاب سال -->
+    <form method="get" class="flex justify-center mb-6">
+      <label for="year" class="text-sm mr-2 mt-1">انتخاب سال:</label>
+      <select name="year" id="year" onchange="this.form.submit()"
+              class="bg-gray-800 text-white border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+        {% for year in year_choices %}
+          <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+        {% endfor %}
+      </select>
+    </form>
+
+    <!-- جدول پرداخت‌ها -->
+    <div class="overflow-x-auto rounded-lg shadow-lg border border-gray-700">
+      <table class="w-full text-sm text-right text-gray-300">
+        <thead class="bg-gray-700 text-gray-200 text-sm">
+          <tr>
+            <th class="px-4 py-3">ماه</th>
+            <th class="px-4 py-3">وضعیت</th>
+            <th class="px-4 py-3">مبلغ</th>
+            <th class="px-4 py-3">تاریخ ثبت</th>
+            <th class="px-4 py-3">ثبت‌کننده</th>
+            <th class="px-4 py-3">توضیحات</th>
+          </tr>
+        </thead>
+        <tbody class="bg-gray-900 divide-y divide-gray-800">
+          {% for value, label in month_choices %}
+            {% with payment=payments_by_month|get_item:value %}
+            <tr class="hover:bg-gray-800 transition">
+              <td class="px-4 py-3 font-medium">{{ label }}</td>
+
+              {% if payment %}
+                <td class="px-4 py-3 text-green-400 font-semibold flex items-center gap-1">
+                  ✅ پرداخت شده
+                </td>
+                <td class="px-4 py-3">{{ payment.formatted_amount }}</td>
+                <td class="px-4 py-3">{{ payment.created_at_shamsi }}</td>
+                <td class="px-4 py-3">{{ payment.created_by.full_name }}</td>
+                <td class="px-4 py-3">{{ payment.description|default:"ـ" }}</td>
+              {% else %}
+                <td class="px-4 py-3 text-red-400 font-semibold flex items-center gap-1">
+                  ❌ پرداخت نشده
+                </td>
+                <td class="px-4 py-3">ـ</td>
+                <td class="px-4 py-3">ـ</td>
+                <td class="px-4 py-3">ـ</td>
+                <td class="px-4 py-3">ـ</td>
+              {% endif %}
+            </tr>
+            {% endwith %}
+          {% endfor %}
         </tbody>
-    </table>
-</body>
-</html>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

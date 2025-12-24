@@ -1,73 +1,88 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <title>لیست ورزشکاران</title>
-</head>
-<body>
-    <h2>لیست ورزشکاران</h2>
+{% extends 'base/base.html' %}
 
-    <!-- فرم جستجو -->
-    <form method="get">
-        <input type="text" name="q" placeholder="جستجو بر اساس نام یا نام خانوادگی" value="{{ request.GET.q }}">
-        <button type="submit">جستجو</button>
+{% block title %}لیست ورزشکاران{% endblock %}
+
+{% block extra_style %}
+<style>
+  .table-row:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto mt-12 px-4">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-3xl font-bold text-red-500">لیست ورزشکاران</h2>
+    <form method="get" class="flex items-center gap-2">
+      <input type="text" name="q" placeholder="جستجو..."
+             value="{{ request.GET.q }}"
+             class="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all w-64" />
+      <button type="submit"
+              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
+        🔍
+      </button>
     </form>
+  </div>
 
-    <br>
-
-    <!-- لیست ورزشکاران -->
-    <table border="1" cellpadding="8" cellspacing="0">
-        <thead>
-            <tr>
-                <th>نام</th>
-                <th>شماره تماس</th>
-                <th>جنسیت</th>
-                <th>نقش</th>
-                <th>عملیات</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for athlete in athletes %}
-                <tr>
-                    <td>{{ athlete.full_name }}</td>
-                    <td>{{ athlete.phone_number }}</td>
-                    <td>{{ athlete.get_gender_display }}</td>
-                    <td>{{ athlete.get_role_display }}</td>
-                    <td>
-                        <!-- تغییر نقش (فقط برای ابرکاربر) -->
-                        <form method="post" action="{% url 'apps.account:change_user_role' athlete.id %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" onclick="return confirm('آیا از تغییر نقش مطمئن هستید؟')">تغییر نقش</button>
-                        </form> |
-
-                        <!-- مشاهده وضعیت پرداخت -->
-                        <a href="{% url 'apps.payment:payment_profile' athlete.id %}">وضعیت پرداخت</a> |
-
-                        <!-- ثبت پرداخت جدید -->
-                        <a href="{% url 'apps.payment:payment_create' athlete.id %}">ثبت پرداخت</a>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4">هیچ ورزشکاری یافت نشد.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
+  <div class="overflow-x-auto rounded-lg shadow-lg border border-gray-700">
+    <table class="w-full text-sm text-right text-gray-300">
+      <thead class="bg-gray-700 text-gray-200 text-sm">
+        <tr>
+          <th class="px-4 py-3">نام</th>
+          <th class="px-4 py-3">شماره تماس</th>
+          <th class="px-4 py-3">جنسیت</th>
+          <th class="px-4 py-3">نقش</th>
+          <th class="px-4 py-3">عملیات</th>
+        </tr>
+      </thead>
+      <tbody class="bg-gray-900 divide-y divide-gray-800">
+        {% for athlete in athletes %}
+        <tr class="table-row transition-all">
+          <td class="px-4 py-3 font-medium">{{ athlete.full_name }}</td>
+          <td class="px-4 py-3">{{ athlete.phone_number }}</td>
+          <td class="px-4 py-3">{{ athlete.get_gender_display }}</td>
+          <td class="px-4 py-3">{{ athlete.get_role_display }}</td>
+          <td class="px-4 py-3 space-x-2 space-x-reverse text-xs">
+            <form method="post" action="{% url 'apps.account:change_user_role' athlete.id %}" class="inline">
+              {% csrf_token %}
+              <button type="submit"
+                      onclick="return confirm('آیا از تغییر نقش مطمئن هستید؟')"
+                      class="text-yellow-400 hover:text-yellow-300 font-semibold">
+                🔄 تغییر نقش
+              </button>
+            </form>
+            <a href="{% url 'apps.payment:payment_profile' athlete.id %}"
+               class="text-blue-400 hover:text-blue-300 font-semibold">
+              💳 پرداخت‌ها
+            </a>
+            <a href="{% url 'apps.payment:payment_create' athlete.id %}"
+               class="text-green-400 hover:text-green-300 font-semibold">
+              ➕ ثبت پرداخت
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="text-center py-6 text-gray-400">هیچ ورزشکاری یافت نشد.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 
-    <!-- صفحه‌بندی -->
-    {% if is_paginated %}
-        <div>
-            {% if page_obj.has_previous %}
-                <a href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}">قبلی</a>
-            {% endif %}
-
-            <span>صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span>
-
-            {% if page_obj.has_next %}
-                <a href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}">بعدی</a>
-            {% endif %}
-        </div>
+  {% if is_paginated %}
+  <div class="mt-6 flex justify-center items-center gap-4 text-sm text-gray-300">
+    {% if page_obj.has_previous %}
+      <a href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}"
+         class="px-3 py-1 bg-gray-700 hover:bg-gray-600 rounded-lg">← قبلی</a>
     {% endif %}
-</body>
-</html>
+    <span>صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+      <a href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}"
+         class="px-3 py-1 bg-gray-700 hover:bg-gray-600 rounded-lg">بعدی →</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

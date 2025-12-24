@@ -1,72 +1,78 @@
+{% extends 'base/base.html' %}
 {% load payment_extras %}
 {% load humanize %}
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <title>پرداخت‌های {{ month_label }} {{ selected_year }}</title>
-</head>
-<body>
-    <h2>پرداخت‌های موفق {{ month_label }} سال {{ selected_year }}</h2>
+
+{% block title %}پرداخت‌های {{ month_label }} {{ selected_year }}{% endblock %}
+
+{% block body %}
+<div class="flex flex-col items-center justify-center min-h-screen px-4 bg-gray-900 text-white">
+  <div class="w-full max-w-6xl">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-red-500">💳 پرداخت‌های موفق {{ month_label }} {{ selected_year }}</h2>
+    </div>
 
     <!-- فیلتر سال -->
-    <form method="get">
-        <label for="year">انتخاب سال:</label>
-        <select name="year" id="year" onchange="this.form.submit()">
-            {% for year in year_choices %}
-                <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
-            {% endfor %}
-        </select>
+    <form method="get" class="flex justify-center mb-6">
+      <label for="year" class="text-sm mr-2 mt-1">انتخاب سال:</label>
+      <select name="year" id="year" onchange="this.form.submit()"
+              class="bg-gray-800 text-white border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+        {% for year in year_choices %}
+          <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+        {% endfor %}
+      </select>
     </form>
 
-    <hr>
-
     <!-- مجموع درآمد -->
-    <p style="font-weight: bold; font-size: 16px;">
-        مجموع درآمد این ماه: {{ total_income|intcomma }} تومان
-    </p>
+    <div class="text-center mb-6">
+      <p class="text-lg font-semibold text-green-400">
+        💰 مجموع درآمد این ماه: {{ total_income|intcomma }} تومان
+      </p>
+    </div>
 
     {% if payments %}
-        <table border="1" cellpadding="8" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>ورزشکار</th>
-                    <th>مبلغ</th>
-                    <th>تاریخ ثبت</th>
-                    <th>ثبت‌کننده</th>
-                    <th>توضیحات</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for payment in payments %}
-                <tr>
-                    <td>{{ payment.user.full_name }}</td>
-                    <td>{{ payment.formatted_amount }}</td>
-                    <td>{{ payment.created_at_shamsi }}</td>
-                    <td>{{ payment.created_by.full_name }}</td>
-                    <td>{{ payment.description|default:"ـ" }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
+      <!-- جدول پرداخت‌ها -->
+      <div class="overflow-x-auto rounded-lg shadow-lg border border-gray-700">
+        <table class="w-full text-sm text-right text-gray-300">
+          <thead class="bg-gray-700 text-gray-200 text-sm">
+            <tr>
+              <th class="px-4 py-3">ورزشکار</th>
+              <th class="px-4 py-3">مبلغ</th>
+              <th class="px-4 py-3">تاریخ ثبت</th>
+              <th class="px-4 py-3">ثبت‌کننده</th>
+              <th class="px-4 py-3">توضیحات</th>
+            </tr>
+          </thead>
+          <tbody class="bg-gray-900 divide-y divide-gray-800">
+            {% for payment in payments %}
+            <tr class="hover:bg-gray-800 transition">
+              <td class="px-4 py-3 font-medium">{{ payment.user.full_name }}</td>
+              <td class="px-4 py-3">{{ payment.formatted_amount }}</td>
+              <td class="px-4 py-3">{{ payment.created_at_shamsi }}</td>
+              <td class="px-4 py-3">{{ payment.created_by.full_name }}</td>
+              <td class="px-4 py-3">{{ payment.description|default:"ـ" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
         </table>
+      </div>
 
-        <!-- پجینیشن -->
-        <div style="margin-top: 20px;">
-            {% if payments.has_other_pages %}
-                <div>
-                    {% if payments.has_previous %}
-                        <a href="?year={{ selected_year }}&page={{ payments.previous_page_number }}">صفحه قبل</a>
-                    {% endif %}
-
-                    <span>صفحه {{ payments.number }} از {{ payments.paginator.num_pages }}</span>
-
-                    {% if payments.has_next %}
-                        <a href="?year={{ selected_year }}&page={{ payments.next_page_number }}">صفحه بعد</a>
-                    {% endif %}
-                </div>
-            {% endif %}
+      <!-- صفحه‌بندی -->
+      {% if payments.has_other_pages %}
+        <div class="mt-6 flex justify-center items-center gap-4 text-sm text-gray-300">
+          {% if payments.has_previous %}
+            <a href="?year={{ selected_year }}&page={{ payments.previous_page_number }}"
+               class="px-3 py-1 bg-gray-700 hover:bg-gray-600 rounded-lg">← صفحه قبل</a>
+          {% endif %}
+          <span>صفحه {{ payments.number }} از {{ payments.paginator.num_pages }}</span>
+          {% if payments.has_next %}
+            <a href="?year={{ selected_year }}&page={{ payments.next_page_number }}"
+               class="px-3 py-1 bg-gray-700 hover:bg-gray-600 rounded-lg">صفحه بعد →</a>
+          {% endif %}
         </div>
+      {% endif %}
     {% else %}
-        <p style="color: red;">هیچ پرداخت موفقی برای این ماه در سال {{ selected_year }} ثبت نشده است.</p>
+      <p class="text-red-400 text-center mt-6">هیچ پرداخت موفقی برای این ماه در سال {{ selected_year }} ثبت نشده است.</p>
     {% endif %}
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}
