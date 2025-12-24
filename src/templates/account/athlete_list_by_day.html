@@ -1,0 +1,68 @@
+{% extends 'base/base.html' %}
+
+{% block title %}ورزشکاران روز {{ selected_day }}{% endblock %}
+
+{% block body %}
+<div class="max-w-5xl mx-auto py-10 px-4 text-white">
+  <h2 class="text-2xl font-bold text-center text-red-500 mb-6">
+    🗓️ ورزشکاران با تاریخ پرداخت روز {{ selected_day }}
+  </h2>
+  <hr class="border-gray-700 mb-6">
+
+  <div class="flex justify-center mb-8">
+    <a href="{% url 'public:home' %}"
+       class="bg-white text-gray-900 font-semibold px-5 py-2 rounded-lg shadow hover:bg-gray-200 transition">
+      🏠 بازگشت به صفحه اصلی
+    </a>
+  </div>
+
+  <form method="get" class="flex justify-center mb-8 gap-2">
+    <input type="text" name="q" placeholder="جستجو بر اساس نام..."
+           value="{{ request.GET.q }}"
+           class="w-full max-w-sm px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+    <button type="submit"
+            class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg shadow">
+      جستجو
+    </button>
+  </form>
+
+  {% if athletes %}
+    <ul class="space-y-4">
+      {% for athlete in athletes %}
+        <li class="bg-gray-800 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between shadow">
+          <div class="mb-2 sm:mb-0">
+            <span class="font-bold text-lg text-white">{{ athlete.full_name }}</span>
+            <span class="text-gray-400 text-sm ml-2">📞 {{ athlete.phone_number }}</span>
+          </div>
+          <div class="flex gap-2">
+            <a href="{% url 'apps.payment:payment_create' athlete.id %}"
+               class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">
+              💳 پرداخت شهریه
+            </a>
+            <a href="{% url 'apps.payment:payment_profile' athlete.id %}"
+               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">
+              📊 وضعیت پرداخت
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% if is_paginated %}
+      <div class="mt-8 flex justify-center items-center gap-4 text-sm text-gray-300">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+             class="px-3 py-1 bg-gray-700 hover:bg-gray-600 rounded-lg">← قبلی</a>
+        {% endif %}
+        <span>صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+             class="px-3 py-1 bg-gray-700 hover:bg-gray-600 rounded-lg">بعدی →</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% else %}
+    <p class="text-center text-red-400 mt-6">هیچ ورزشکاری برای این روز یافت نشد.</p>
+  {% endif %}
+</div>
+{% endblock %}

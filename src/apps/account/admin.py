@@ -20,7 +20,7 @@ class CustomUserAdmin(UserAdmin):
         "first_name",
         "last_name",
     )
-    list_filter = ("is_active", "role", "first_name", "last_name")
+    list_filter = ("is_active", "role", "first_name", "last_name", "payment_day")
     fieldsets = (
         (
             None,
@@ -30,6 +30,7 @@ class CustomUserAdmin(UserAdmin):
                     "password",
                     "role",
                     "gender",
+                    "payment_day",
                     "national_id",
                     "image",
                     "first_name",

@@ -12,17 +12,25 @@
 
 {% block body %}
 <div class="max-w-7xl mx-auto mt-12 px-4">
-  <div class="flex items-center justify-between mb-6">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
     <h2 class="text-3xl font-bold text-red-500">لیست ورزشکاران</h2>
-    <form method="get" class="flex items-center gap-2">
-      <input type="text" name="q" placeholder="جستجو..."
-             value="{{ request.GET.q }}"
-             class="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all w-64" />
-      <button type="submit"
-              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
-        🔍
-      </button>
-    </form>
+
+    <div class="flex flex-col sm:flex-row items-center gap-2">
+      <form method="get" class="flex items-center gap-2">
+        <input type="text" name="q" placeholder="جستجو..."
+               value="{{ request.GET.q }}"
+               class="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all w-64" />
+        <button type="submit"
+                class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
+          🔍
+        </button>
+      </form>
+
+      <a href="{% url 'public:home' %}"
+         class="bg-white text-gray-900 font-semibold px-4 py-2 rounded-lg shadow hover:bg-gray-200 transition">
+        🏠 صفحه اصلی
+      </a>
+    </div>
   </div>
 
   <div class="overflow-x-auto rounded-lg shadow-lg border border-gray-700">

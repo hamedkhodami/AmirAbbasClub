@@ -32,6 +32,13 @@
       <p class="text-sm text-gray-400 mt-1">افزودن ورزشکار جدید به سیستم</p>
     </div>
 
+    <div class="dashboard-card bg-gray-800 p-6 rounded-xl shadow-lg transition-transform cursor-pointer"
+         onclick="navigateTo('{% url 'apps.account:payment_day_list' %}')">
+      <div class="text-3xl mb-2">💵</div>
+      <h3 class="text-lg font-semibold text-white">پرداخت ها</h3>
+      <p class="text-sm text-gray-400 mt-1"> بر اساس روز</p>
+    </div>
+
     <div class="dashboard-card bg-red-600 hover:bg-red-700 p-6 rounded-xl shadow-lg transition-transform cursor-pointer text-center col-span-full"
          onclick="navigateTo('{% url 'apps.account:logout' %}')">
       <div class="text-3xl mb-2">🚪</div>

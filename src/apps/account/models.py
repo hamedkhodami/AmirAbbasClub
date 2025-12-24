@@ -1,6 +1,11 @@
 from apps.core.models import BaseModel
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import (
+    MaxLengthValidator,
+    MaxValueValidator,
+    MinLengthValidator,
+    MinValueValidator,
+)
 from django.db import models
 
 from .enums import UserGenderEnum, UserRoleEnum
@@ -32,6 +37,10 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     )
     gender = models.CharField(
         "جنسیت", max_length=10, choices=Gender.choices, null=True, blank=True
+    )
+    payment_day = models.PositiveSmallIntegerField(
+        "روز پرداخت شهریه",
+        validators=[MinValueValidator(1), MaxValueValidator(30)],
     )
     national_id = models.CharField(
         "کد ملی",

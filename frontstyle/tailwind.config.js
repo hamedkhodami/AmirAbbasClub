@@ -11,6 +11,7 @@ module.exports = {
       },
       backgroundImage: {
         'gradient-blue-gray': 'linear-gradient(to right, #4A90E2, #E2E8F0)',
+        'club-bg': "url('/static/public/images/bg.png')"
       },
     },
   },

@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, RedirectView
+from django.views.generic import ListView, RedirectView, TemplateView
 
 from . import mixins
 from .enums import UserRoleEnum
@@ -44,11 +44,14 @@ class LogoutView(LoginRequiredMixin, RedirectView):
 class AthleteAllListView(mixins.SuperUserRequiredMixin, ListView):
     template_name = "account/all_user.html"
     context_object_name = "athletes"
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get("q", "")
-        base_qs = User.objects.all()
+        base_qs = User.objects.filter(
+            role__in=[UserRoleEnum.ATHLETE, UserRoleEnum.COACH]
+        )
+
         if query:
             base_qs = base_qs.filter(
                 Q(first_name__icontains=query) | Q(last_name__icontains=query)
@@ -108,6 +111,36 @@ class CoachSignupView(mixins.SuperUserRequiredMixin, FormView):
         return super().form_valid(form)
 
 
+class AllPaymentDayListView(mixins.SuperUserRequiredMixin, TemplateView):
+    template_name = "account/all_users_payment.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["days"] = list(range(1, 31))
+        return context
+
+
+class AllAthletesByPaymentDayView(mixins.SuperUserRequiredMixin, ListView):
+    template_name = "account/all_user_list_by_day.html"
+    context_object_name = "athletes"
+    paginate_by = 5
+
+    def get_queryset(self):
+        day = self.kwargs.get("day")
+        query = self.request.GET.get("q", "")
+        qs = User.objects.filter(payment_day=day)
+        if query:
+            qs = qs.filter(
+                Q(first_name__icontains=query) | Q(last_name__icontains=query)
+            )
+        return qs.order_by("first_name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["selected_day"] = self.kwargs.get("day")
+        return context
+
+
 # ---------------------------------------------------------------
 
 
@@ -115,7 +148,7 @@ class CoachSignupView(mixins.SuperUserRequiredMixin, FormView):
 class AthleteListView(mixins.CoachOrSuperUserRequiredMixin, ListView):
     template_name = "account/athlete_list.html"
     context_object_name = "athletes"
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get("q", "")
@@ -139,6 +172,42 @@ class AthleteSignupView(mixins.CoachOrSuperUserRequiredMixin, FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
+
+class PaymentDayListView(mixins.CoachOrSuperUserRequiredMixin, TemplateView):
+    template_name = "account/payment_day_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["days"] = list(range(1, 31))
+        return context
+
+
+class AthletesByPaymentDayView(mixins.CoachOrSuperUserRequiredMixin, ListView):
+    template_name = "account/athlete_list_by_day.html"
+    context_object_name = "athletes"
+    paginate_by = 5
+
+    def get_queryset(self):
+        day = self.kwargs.get("day")
+        user = self.request.user
+        query = self.request.GET.get("q", "")
+
+        qs = User.objects.filter(
+            role=UserRoleEnum.ATHLETE, gender=user.gender, payment_day=day
+        )
+
+        if query:
+            qs = qs.filter(
+                Q(first_name__icontains=query) | Q(last_name__icontains=query)
+            )
+
+        return qs.order_by("first_name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["selected_day"] = self.kwargs.get("day")
+        return context
 
 
 # ---------------------------------------------------------------

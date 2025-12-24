@@ -41,3 +41,30 @@
 | 6️⃣   | Phase 2 Summary & UI Freeze                         | Final review, freeze UI, and prepare for next phase (e.g. API, dashboards, reports). |
 
 ---
+
+## 🧪 Phase 3 Roadmap – Finalization, Delivery & Clean Code
+
+| Step | Title                             | Description                                                                 |
+|-----:|-----------------------------------|-----------------------------------------------------------------------------|
+| 1️⃣   | Comprehensive Testing             | Perform full QA testing: roles, forms, payments, filters, access control, UI responsiveness, and data integrity. Prepare a detailed test checklist. |
+| 2️⃣   | Client Demo Preparation           | Set up a demo environment with sample data. Prepare a walkthrough scenario for client presentation. Ensure all flows are functional and visually polished. |
+| 3️⃣   | Apply Client Feedback             | Collect feedback from demo session. Implement requested changes including UI tweaks, logic adjustments, or additional features. |
+| 4️⃣   | Clean Code & Final Refactoring    | Refactor codebase using SOLID principles. Remove dead code, improve naming, add docstrings, and ensure consistency across apps. |
+| 5️⃣   | Final QA & Production Readiness   | Run final tests, prepare deployment scripts, configure monitoring/logging, and finalize documentation for handoff. |
+
+
+---
+
+## 🚢 Phase 4 Roadmap – Deployment to Client Server
+
+| Step | Title                             | Description                                                                 |
+|-----:|-----------------------------------|-----------------------------------------------------------------------------|
+| 1️⃣   | Server Access & Environment Setup | Connect to client server (SSH), update packages, configure timezone, firewall, and locales. |
+| 2️⃣   | Python Environment & Dependencies | Install Python, create virtualenv, install dependencies via `pip`, and set up `.env` variables. |
+| 3️⃣   | PostgreSQL Setup & Migration      | Install PostgreSQL, create database and user, configure access, and run Django migrations. |
+| 4️⃣   | Static & Media Files Configuration | Run `collectstatic`, configure static/media directories with correct permissions and Nginx access. |
+| 5️⃣   | Gunicorn & Supervisor Configuration | Set up Gunicorn as WSGI server and Supervisor to manage and auto-restart the process. |
+| 6️⃣   | Nginx Reverse Proxy Setup         | Configure Nginx to serve the app and proxy requests to Gunicorn. Handle static/media routing. |
+| 7️⃣   | SSL Certificate (HTTPS)           | Use Certbot to install Let's Encrypt SSL certificate and enable auto-renewal. |
+| 8️⃣   | Final Smoke Test & Debugging      | Test all routes, forms, static/media delivery, and logs. Fix any deployment issues. |
+| 9️⃣   | Deployment Documentation & Handover | Document deployment steps, credentials, and maintenance instructions. Deliver to client. |

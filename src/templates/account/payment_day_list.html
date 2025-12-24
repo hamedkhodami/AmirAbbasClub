@@ -1,0 +1,19 @@
+{% extends 'base/base.html' %}
+
+{% block title %}انتخاب روز پرداخت شهریه{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto py-12 px-4 text-white">
+  <h2 class="text-2xl font-bold text-center text-red-500 mb-6">انتخاب روز پرداخت شهریه</h2>
+  <hr class="border-gray-700 mb-8">
+
+  <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 justify-center">
+    {% for day in days %}
+      <a href="{% url 'account:payment_day_users' day %}"
+         class="flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-800 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl shadow-md text-lg transition-all">
+        {{ day }}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

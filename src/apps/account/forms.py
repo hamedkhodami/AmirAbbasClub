@@ -51,6 +51,7 @@ class AthleteSignupForm(forms.ModelForm):
             "first_name",
             "last_name",
             "national_id",
+            "payment_day",
             "gender",
             "image",
         ]
@@ -93,6 +94,7 @@ class CoachSignupForm(forms.ModelForm):
             "first_name",
             "last_name",
             "national_id",
+            "payment_day",
             "gender",
             "image",
         ]

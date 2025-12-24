@@ -19,7 +19,7 @@ class PaymentCreateView(mixins.CoachOrSuperUserRequiredMixin, CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.athlete = get_object_or_404(
-            User, pk=kwargs["pk"], role=UserRoleEnum.ATHLETE
+            User, pk=kwargs["pk"], role__in=[UserRoleEnum.ATHLETE, UserRoleEnum.COACH]
         )
         return super().dispatch(request, *args, **kwargs)
 
@@ -48,7 +48,7 @@ class PaymentProfileView(mixins.CoachOrSuperUserRequiredMixin, DetailView):
     pk_url_kwarg = "pk"
 
     def get_queryset(self):
-        return User.objects.filter(role=UserRoleEnum.ATHLETE)
+        return User.objects.filter(role__in=[UserRoleEnum.ATHLETE, UserRoleEnum.COACH])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -75,7 +75,6 @@ class PaymentProfileView(mixins.CoachOrSuperUserRequiredMixin, DetailView):
 
         context["payments_by_month"] = payments_by_month
         context["month_choices"] = PaymentMonth.choices
-
         context["year_choices"] = [str(y) for y in range(1404, 1430)]
 
         return context
